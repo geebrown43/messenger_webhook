@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const app = express().use(bodyParser.json());
+const PAGE_ACCESS_TOKEN = process.env.PAGE_ACCESS_TOKEN
 
 app.post("/webhook", (req, res) => {
   let body = req.body;
@@ -8,6 +9,8 @@ app.post("/webhook", (req, res) => {
     body.entry.forEach(element => {
       let webhook = element.messaging[0];
       console.log(webhook);
+      let sender_psid = webhook.sender.id
+      console.log('Sender PSID: ' + sender_psid)
     });
     res.status(200).send("EVENT_RECEIVED");
   } else {
@@ -27,5 +30,20 @@ app.get("/webhook", (req, res) => {
       : res.sendStatus(403);
   }
 });
+
+// Handles messages events
+function handleMessage(sender_psid, received_message) {
+
+}
+
+// Handles messaging_postbacks events
+function handlePostback(sender_psid, received_postback) {
+
+}
+
+// Sends response messages via the Send API
+function callSendAPI(sender_psid, response) {
+  
+}
 
 app.listen(process.env.PORT || 3000, () => console.log("webhook listening"));
