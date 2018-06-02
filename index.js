@@ -8,7 +8,7 @@ app.post("/webhook", (req, res) => {
   if (body.object === "page") {
     body.entry.forEach(element => {
       let webhook = element.messaging[0];
-      console.log(webhook);
+      console.log("worked", webhook.message);
       let sender_psid = webhook.sender.id
       console.log('Sender PSID: ' + sender_psid)
       if(webhook.message){
@@ -30,9 +30,12 @@ app.get("/webhook", (req, res) => {
   let challenge = req.query["hub.challenge"];
 
   if (mode && token) {
-    mode === "subscribe" && token === verify
-      ? res.status(200).send(challenge)
-      : res.sendStatus(403);
+    if(mode === "subscribe" && token === verify){
+      console.log('WEBHOOK_VERIFIED')
+      res.status(200).send(challenge)
+    } else {
+      res.sendStatus(403);
+    }    
   }
 });
 
